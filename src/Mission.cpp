@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     ROS_INFO("Move Left");
     for (int count = 1; count < 175; count++)
     {
-        drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(-1, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     ROS_INFO("Move Right");
     for (int count = 1; count < 175; count++)
     {
-        drone.Commands.move_Position_Local(4, 0, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(2, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     ROS_INFO("Re-Centre");
     for (int count = 1; count < 175; count++)
     {
-        drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(-1, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     ROS_INFO("Move Backwards");
     for (int count = 1; count < 175; count++)
     {
-        drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, -1, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     ROS_INFO("Move Forwards");
     for (int count = 1; count < 175; count++)
     {
-        drone.Commands.move_Position_Local(0, 4, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, 2, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     ROS_INFO("Re-Centre");
     for (int count = 1; count < 175; count++)
     {
-        drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, -1, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
