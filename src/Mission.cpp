@@ -24,37 +24,53 @@ int main(int argc, char **argv)
     drone.Commands.request_Takeoff(altitude, time_takeoff);
 
     // Go one meter up and stay there. Total time 10 seconds
-    ROS_INFO("Command 1");
+    ROS_INFO("Move Left");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(-2, 0, 5, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
     // Go one meter up and stay there. Total time 10 seconds
-    ROS_INFO("Command 2");
+    ROS_INFO("Move Right");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(2, 0, 5, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(4, 0, 0, 0, "BODY_OFFSET");
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    ROS_INFO("Re-Centre");
+    for (int count = 1; count < 125; count++)
+    {
+        drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
     // Go one meter up and stay there. Total time 10 seconds
-    ROS_INFO("Command 3");
+    ROS_INFO("Move Backwards");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(0, 2, 5, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
     // Go one meter up and stay there. Total time 10 seconds
-    ROS_INFO("Command 4");
+    ROS_INFO("Move Forwards");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(0, -2, 5, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, 4, 0, 0, "BODY_OFFSET");
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    ROS_INFO("Re-Centre");
+    for (int count = 1; count < 125; count++)
+    {
+        drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
