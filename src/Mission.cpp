@@ -19,62 +19,45 @@ int main(int argc, char **argv)
 
     // MISSION STARTS HERE:
     // Request takeoff at 1m altitude. At 25Hz = 10 seconds
-    float altitude = 3;
+    float altitude = 5;
     int time_takeoff = 300;
     drone.Commands.request_Takeoff(altitude, time_takeoff);
 
-    /*
     // Go one meter up and stay there. Total time 10 seconds
-    ROS_INFO("Goto Command");
+    ROS_INFO("Command 1");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(-5, 5, 2, 0, "LOCAL");
+        drone.Commands.move_Position_Local(-2, 0, 5, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
-
-    ROS_INFO("First Command");
+    // Go one meter up and stay there. Total time 10 seconds
+    ROS_INFO("Command 2");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(2, 0, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(2, 0, 5, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
-    ROS_INFO("Second Command");
+    // Go one meter up and stay there. Total time 10 seconds
+    ROS_INFO("Command 3");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(0, 2, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, 2, 5, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
-    
-    ROS_INFO("Third Command");
+    // Go one meter up and stay there. Total time 10 seconds
+    ROS_INFO("Command 4");
     for (int count = 1; count < 125; count++)
     {
-        drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
+        drone.Commands.move_Position_Local(0, -2, 5, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
-
-    ROS_INFO("Fourth Command");
-    for (int count = 1; count < 125; count++)
-    {
-        drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
-        ros::spinOnce();
-        rate.sleep();
-    }
-
-    ROS_INFO("Fifth Command");
-    for (int count = 1; cyount < 125; count++)
-    {
-        drone.Commands.move_Velocity_Local(0, 2, altitude, 0, "BODY_OFFSET");
-        ros::spinOnce();
-        rate.sleep();
-    }
-    */
 
     // Land and disarm
     drone.Commands.request_LandingAuto();
