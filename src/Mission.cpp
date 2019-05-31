@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
     // Go one meter up and stay there. Total time 10 seconds
     ROS_INFO("Move Left");
-    for (int count = 1; count < 125; count++)
+    for (int count = 1; count < 175; count++)
     {
         drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
     // Go one meter up and stay there. Total time 10 seconds
     ROS_INFO("Move Right");
-    for (int count = 1; count < 125; count++)
+    for (int count = 1; count < 175; count++)
     {
         drone.Commands.move_Position_Local(4, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     }
 
     ROS_INFO("Re-Centre");
-    for (int count = 1; count < 125; count++)
+    for (int count = 1; count < 175; count++)
     {
         drone.Commands.move_Position_Local(-2, 0, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
     // Go one meter up and stay there. Total time 10 seconds
     ROS_INFO("Move Backwards");
-    for (int count = 1; count < 125; count++)
+    for (int count = 1; count < 175; count++)
     {
         drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
     // Go one meter up and stay there. Total time 10 seconds
     ROS_INFO("Move Forwards");
-    for (int count = 1; count < 125; count++)
+    for (int count = 1; count < 175; count++)
     {
         drone.Commands.move_Position_Local(0, 4, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
@@ -68,14 +68,41 @@ int main(int argc, char **argv)
     }
 
     ROS_INFO("Re-Centre");
-    for (int count = 1; count < 125; count++)
+    for (int count = 1; count < 175; count++)
     {
         drone.Commands.move_Position_Local(0, -2, 0, 0, "BODY_OFFSET");
         ros::spinOnce();
         rate.sleep();
     }
 
+    /*
+    ROS_INFO("Moving to GPS coordinate 1");
+    for (int count = 1; count < 300; count++)
+    {
+        drone.Commands.move_Position_Global(51.412420, -0.641533, 0, 0, "BODY_OFFSET");
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    ROS_INFO("Moving to GPS coordinate 2");
+    for (int count = 1; count < 300; count++)
+    {
+        drone.Commands.move_Position_Global(51.412576, -0.641681, 0, 0, "BODY_OFFSET");
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    ROS_INFO("Moving to GPS coordinate 3");
+    for (int count = 1; count < 300; count++)
+    {
+        drone.Commands.move_Position_Global(51.412384, -0.641616, 0, 0, "BODY_OFFSET");
+        ros::spinOnce();
+        rate.sleep();
+    }
+    */
+
     // Land and disarm
+    ROS_INFO("Gonna Land Now");
     drone.Commands.request_LandingAuto();
 
     // Exit

@@ -216,11 +216,12 @@ void commands::move_Position_Global(float _latitude, float _longitude, float _al
     pos.type_mask = mavros_msgs::GlobalPositionTarget::IGNORE_VX | mavros_msgs::GlobalPositionTarget::IGNORE_VY |
                     mavros_msgs::GlobalPositionTarget::IGNORE_VZ | mavros_msgs::GlobalPositionTarget::IGNORE_AFX |
                     mavros_msgs::GlobalPositionTarget::IGNORE_AFY | mavros_msgs::GlobalPositionTarget::IGNORE_AFZ |
-                    mavros_msgs::GlobalPositionTarget::FORCE | mavros_msgs::GlobalPositionTarget::IGNORE_YAW_RATE;
+                    mavros_msgs::GlobalPositionTarget::FORCE | mavros_msgs::GlobalPositionTarget::IGNORE_YAW_RATE | 
+                    mavros_msgs::GlobalPositionTarget::IGNORE_ALTITUDE;
 
     pos.latitude = _latitude;
     pos.longitude = _longitude;
-    pos.altitude = _altitude;
+    // pos.altitude = _altitude;
     pos.yaw = functions::DegToRad(_yaw_angle_deg);
     target_pub_global.publish(pos);
 }
