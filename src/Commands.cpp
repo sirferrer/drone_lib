@@ -91,9 +91,9 @@ void commands::request_Landing()
 void commands::request_Takeoff(float _altitude, float _counter)
 {
     ROS_INFO("GDPdrone: Takeoff Requested");
-    for (int i = _counter; i > 0; i--)
+    for (int i = 1; i < _counter; i++)
     {
-        move_Position_Local(0, 0, _altitude, 0, "BODY_OFFSET");
+        move_Position_Local(0, 0, _altitude, 0, "BODY_OFFSET", i);
         ros::spinOnce();
         rate.sleep();
     }
@@ -103,24 +103,19 @@ void commands::request_Takeoff(float _altitude, float _counter)
 //-----   MOVEMENT COMMANDS -----//
 
 ///< BODY_OFFSET (x,y,z) = (forward, left, up)
-void commands::move_Position_Local(float _x, float _y, float _z, float _yaw_angle_deg, std::string _frame)
+void commands::move_Position_Local(float _x, float _y, float _z, float _yaw_angle_deg, std::string _frame, int _count)
 {
     mavros_msgs::PositionTarget pos;
 
     // Set reference Frame
     commands::set_frame(&pos, _frame, false);
 
-    ///< this doesn't work properly if the input is repeated for BODY_OFFSET as you need to calculate the new corrected position through transform_frame
     // If this is the first time this command is sent, rotate the frame
-    if (check_Inputs(_x, _y, _z, _yaw_angle_deg))
+    if (_count == 1)
     {
         std::vector<float> input_vector = {_x, _y, _z, _yaw_angle_deg};
         corrected_vector = commands::transform_frame(input_vector, _frame);
     }
-
-    //temp fix
-    // std::vector<float> input_vector = {_x, _y, _z, _yaw_angle_deg};
-    // corrected_vector = commands::transform_frame(input_vector, _frame);
 
     pos.type_mask = mavros_msgs::PositionTarget::IGNORE_VX | mavros_msgs::PositionTarget::IGNORE_VY |
                     mavros_msgs::PositionTarget::IGNORE_VZ | mavros_msgs::PositionTarget::IGNORE_AFX |
@@ -216,12 +211,11 @@ void commands::move_Position_Global(float _latitude, float _longitude, float _al
     pos.type_mask = mavros_msgs::GlobalPositionTarget::IGNORE_VX | mavros_msgs::GlobalPositionTarget::IGNORE_VY |
                     mavros_msgs::GlobalPositionTarget::IGNORE_VZ | mavros_msgs::GlobalPositionTarget::IGNORE_AFX |
                     mavros_msgs::GlobalPositionTarget::IGNORE_AFY | mavros_msgs::GlobalPositionTarget::IGNORE_AFZ |
-                    mavros_msgs::GlobalPositionTarget::FORCE | mavros_msgs::GlobalPositionTarget::IGNORE_YAW_RATE | 
-                    mavros_msgs::GlobalPositionTarget::IGNORE_ALTITUDE;
+                    mavros_msgs::GlobalPositionTarget::FORCE | mavros_msgs::GlobalPositionTarget::IGNORE_YAW_RATE;
 
     pos.latitude = _latitude;
     pos.longitude = _longitude;
-    // pos.altitude = _altitude;
+    pos.altitude = _altitude;
     pos.yaw = functions::DegToRad(_yaw_angle_deg);
     target_pub_global.publish(pos);
 }
@@ -318,7 +312,7 @@ void commands::set_frame(mavros_msgs::PositionTarget *_pos, std::string _frame, 
     }
     else
     {
-        ROS_INFO("Frame of reference should either be BODY or LOCAL"); //TODO: Give a harder exception?
+        ROS_INFO("Frame of reference should either be BODY, BODY_OFFSET, LOCAL or LOCAL_OFFSET");
         return;
     }
 }
@@ -327,14 +321,18 @@ std::vector<float> commands::transform_frame(std::vector<float> _vector, std::st
 {
     std::vector<float> corrected_vector(4);
 
+    // Heading angle as measured from East Counter-Clockwise
+    float theta = 450 - compass_heading.data;
+    float theta_rad = functions::DegToRad(90 - theta);
+
     // C++ does not support switching with strings, ugly "if" cascade instead
     if (_frame == "BODY")
     {
         // Rotate by heading angle, Z Axis does not need rotation on NED
-        corrected_vector[0] = -_vector[0] * sin(-compass_heading.data + 90) + _vector[1] * cos(-compass_heading.data + 90);
-        corrected_vector[1] = (_vector[0] * cos(-compass_heading.data + 90) + _vector[1] * sin(-compass_heading.data + 90)) * -1;
+        corrected_vector[0] = _vector[0] * cos(theta_rad) + _vector[1] * sin(theta_rad);
+        corrected_vector[1] = _vector[1] * cos(theta_rad) - _vector[0] * sin(theta_rad);
         corrected_vector[2] = _vector[2];
-        corrected_vector[3] = _vector[3] + 90 - compass_heading.data;
+        corrected_vector[3] = _vector[3] + theta;
     }
     else if (_frame == "LOCAL")
     {
@@ -344,10 +342,10 @@ std::vector<float> commands::transform_frame(std::vector<float> _vector, std::st
     else if (_frame == "BODY_OFFSET")
     {
         // Rotate by heading angle, Z Axis does not need rotation on NED
-        corrected_vector[0] = -_vector[0] * sin(-compass_heading.data + 90) + _vector[1] * cos(-compass_heading.data + 90);
-        corrected_vector[1] = (_vector[0] * cos(-compass_heading.data + 90) + _vector[1] * sin(-compass_heading.data + 90)) * -1;
+        corrected_vector[0] = _vector[0] * cos(theta_rad) + _vector[1] * sin(theta_rad);
+        corrected_vector[1] = _vector[1] * cos(theta_rad) - _vector[0] * sin(theta_rad);
         corrected_vector[2] = _vector[2];
-        corrected_vector[3] = _vector[3] + 90 - compass_heading.data;
+        corrected_vector[3] = _vector[3] + theta;
 
         // Offset by current position
         corrected_vector[0] += local_pose.pose.position.x;

@@ -6,6 +6,12 @@ data::data(float _rate)
 {
     rate = ros::Rate(_rate);
 
+    // Default, don't store data
+    save_data = false; 
+
+    // Initialise Ros Bag
+    bag.open(get_log_name(), rosbag::bagmode::Write);
+
     // Subscribe to Altitude Data
     altitude_sub = nh.subscribe<mavros_msgs::Altitude>("/mavros/altitude", 10, &data::altitude_cb, this);
 
@@ -28,10 +34,10 @@ data::data(float _rate)
     velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("/mavros/local_position/velocity", 10, &data::velocity_cb, this);
 
     ///< Subscribe to target xyz relative to drone
-    target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_wrtdrone_position" , 10, &data::target_position_relative_cb, this);
+    target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_wrtdrone_position", 10, &data::target_position_relative_cb, this);
 
     ///< Subscribe to target position relative to drone origin
-    target_position_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_position" , 10, &data::target_position_cb, this);
+    target_position_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_position", 10, &data::target_position_cb, this);
 
     ///< Subscribe to target GPS data
     target_gps_sub = nh.subscribe<sensor_msgs::NavSatFix>("/android/fix", 10, &data::target_gps_cb, this);
@@ -39,8 +45,9 @@ data::data(float _rate)
 
 ///< Yaw angle calculator (in degrees) based off target position relative to drone
 // - code causes a quarternion break!!?
-float data::CalculateYawAngle() {
-    yaw_angle_buffer.push_back(atan2(target_position_relative.point.y , target_position_relative.point.x) * 180.0 / pi);
+float data::CalculateYawAngle()
+{
+    yaw_angle_buffer.push_back(atan2(target_position_relative.point.y, target_position_relative.point.x) * 180.0 / pi);
 
     return (yaw_angle_buffer[0] + yaw_angle_buffer[1] + yaw_angle_buffer[2]) / 3.0f; ///<try using buffer
 }
@@ -66,19 +73,22 @@ void data::target_gps_cb(const sensor_msgs::NavSatFix::ConstPtr &msg)
 // Altitude subscriber callback function
 void data::altitude_cb(const mavros_msgs::Altitude::ConstPtr &msg)
 {
-    infrared_altitude = *msg;
+    altitude = *msg;
+    if (save_data){bag.write("/mavros/altitude", ros::Time::now(), *msg);}
 }
 
 // Heading subscriber callback function
 void data::heading_cb(const std_msgs::Float64::ConstPtr &msg)
 {
     compass_heading = *msg;
+    if (save_data){bag.write("/mavros/global_position/compass_hdg", ros::Time::now(), *msg);}
 }
 
 // GPS subscriber callback function
 void data::gps_cb(const sensor_msgs::NavSatFix::ConstPtr &msg)
 {
     gps_raw = *msg;
+    if (save_data){bag.write("/mavros/global_position/global", ros::Time::now(), *msg);}
 }
 
 // LiDar subscriber callback function
@@ -97,10 +107,21 @@ void data::imu_cb(const sensor_msgs::Imu::ConstPtr &msg)
 void data::pose_cb(const geometry_msgs::PoseStamped::ConstPtr &msg)
 {
     local_pose = *msg;
+    if (save_data){bag.write("/mavros/local_position/pose", ros::Time::now(), *msg);}
 }
 
 // Velocity subscriber callback function
 void data::velocity_cb(const geometry_msgs::TwistStamped::ConstPtr &msg)
 {
     local_velocity = *msg;
+}
+
+std::string data::get_log_name()
+{
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+    return "src/drone_lib/flight_data/" + oss.str() + "_data.bag";
 }

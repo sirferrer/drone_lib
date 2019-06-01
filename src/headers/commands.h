@@ -32,7 +32,7 @@ public:
     void request_Takeoff(float _altitude, float _counter);
     void request_Hover(float _time);
 
-    void move_Position_Local(float _x, float _y, float _z, float _yaw_angle_deg, std::string _frame);
+    void move_Position_Local(float _x, float _y, float _z, float _yaw_angle_deg, std::string _frame, int count);
     void move_Velocity_Local(float _x, float _y, float _z, float _yaw_rate_deg_s, std::string _frame);
     void move_Acceleration_Local(float _x, float _y, float _z, std::string _frame);
     void move_Acceleration_Local_Trick(float _x, float _y, float _z, std::string _frame, float rate);

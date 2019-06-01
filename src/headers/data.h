@@ -4,6 +4,7 @@
 #include <ros/ros.h>
 #include <mavros_msgs/Altitude.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/String.h>
 #include <sensor_msgs/NavSatFix.h>
 #include <sensor_msgs/Imu.h>
 #include <geometry_msgs/TwistStamped.h>
@@ -11,12 +12,13 @@
 #include <geometry_msgs/PointStamped.h>
 #include <sensor_msgs/LaserScan.h>
 #include <boost/circular_buffer.hpp>
+#include <rosbag/bag.h>
 
 class data
 {
 public:
     // Data
-    mavros_msgs::Altitude infrared_altitude;
+    mavros_msgs::Altitude altitude;
     std_msgs::Float64 compass_heading;
     sensor_msgs::NavSatFix gps_raw;
     sensor_msgs::LaserScan lidar;
@@ -29,6 +31,7 @@ public:
     sensor_msgs::NavSatFix target_gps; ///< target gps
 
     float CalculateYawAngle(); ///< calculates yaw angle for drone to face the target
+    bool save_data;
 
     ros::Rate GetRate(){ return rate; } ///< added to get the rate
 
@@ -41,6 +44,7 @@ private:
     // Hidden methods
     ros::NodeHandle nh;
     ros::Rate rate = ros::Rate(25.0);
+    rosbag::Bag bag;
 
     ros::Subscriber compass_sub;
     ros::Subscriber altitude_sub;
@@ -63,6 +67,7 @@ private:
     void pose_cb(const geometry_msgs::PoseStamped::ConstPtr &msg);
     void velocity_cb(const geometry_msgs::TwistStamped::ConstPtr &msg);
     void lidar_cb(const sensor_msgs::LaserScan::ConstPtr &msg);
+    std::string get_log_name();
 
     boost::circular_buffer<float> yaw_angle_buffer = boost::circular_buffer<float>(3);   ///< Circular buffer for yaw angle to target
 };
