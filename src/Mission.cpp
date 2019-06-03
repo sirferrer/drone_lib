@@ -25,7 +25,16 @@ int main(int argc, char **argv)
 
     mavros_msgs::OverrideRCIn rc_msg;
     ROS_INFO("init done");
+    
+    rc_msg.channels[0] = 65535;
+    rc_msg.channels[1] = 65535;
+    rc_msg.channels[2] = 65535;
+    rc_msg.channels[3] = 65535;
+    rc_msg.channels[4] = 65535;
+    rc_msg.channels[5] = 65535;
     rc_msg.channels[6] = 1200;
+    rc_msg.channels[7] = 65535;
+
     ROS_INFO("set value");
 
     for (int i = 1; i < 400; i++)
@@ -144,11 +153,11 @@ int main(int argc, char **argv)
         ros::spinOnce();
         rate.sleep();
     }
-    */
 
     // Land and disarm
     ROS_INFO("Landing Now");
     drone.Commands.request_LandingAuto();
+    */
 
     // Exit
     return 0;
