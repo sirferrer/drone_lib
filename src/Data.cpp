@@ -39,7 +39,7 @@ data::data(float _rate)
     ///< Subscribe to target GPS data
     target_gps_sub = nh.subscribe<sensor_msgs::NavSatFix>("/android/fix", 10, &data::target_gps_cb, this);
 
-    //     ///< Subscribe to transformed depthcam data (and transform to PC1 in callback) ///< data
+    // ///< Subscribe to transformed depthcam data (and transform to PC1 in callback) ///< data
     // depth_cam_sub= nh.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points_transformed", 10, &data::depth_cam_cb, this);
 }
 
