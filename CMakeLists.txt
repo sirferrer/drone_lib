@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   rosbag
+  mavros_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -120,6 +121,8 @@ add_executable(drone_node src/Mission.cpp src/GDPdrone.cpp src/Commands.cpp src/
 add_executable(robert_node src/Mission_Robert.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(joel_node src/Mission_Joel.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(jake_node src/Mission_Jake.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
+add_executable(servo_node src/Mission_Servo.cpp)
+
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(drone_node
@@ -135,5 +138,9 @@ target_link_libraries(joel_node
 )
 
 target_link_libraries(jake_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(servo_node
   ${catkin_LIBRARIES}
 )
