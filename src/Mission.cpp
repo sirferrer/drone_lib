@@ -13,11 +13,37 @@ int main(int argc, char **argv)
 
     // Set the rate. Default working frequency is 25 Hz
     float loop_rate = 25.0;
+    ros::NodeHandle nh;
     ros::Rate rate = ros::Rate(loop_rate);
 
     // Initialise and Arm
     drone.Commands.await_Connection();
     drone.Commands.set_Offboard();
+
+    // Subscribe to RC
+    ros::Publisher servo_pub = nh.advertise<mavros_msgs::OverrideRCIn>("rc/override", 10);
+
+    mavros_msgs::OverrideRCIn rc_msg;
+    ROS_INFO("init done");
+    rc_msg.channels[6] = 1200;
+    ROS_INFO("set value");
+
+    for (int i = 1; i < 400; i++)
+    {
+        servo_pub.publish(rc_msg);
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    for (int i = 1; i < 400; i++)
+    {
+        rc_msg.channels[6] = 1900;
+        servo_pub.publish(rc_msg);
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    /*
     drone.Commands.set_Armed();
 
     // MISSION STARTS HERE:

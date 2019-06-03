@@ -14,6 +14,7 @@
 #include <mavros_msgs/PositionTarget.h>
 #include <mavros_msgs/GlobalPositionTarget.h>
 #include <std_msgs/Float64.h>
+#include <mavros_msgs/OverrideRCIn.h>
 
 class commands
 {
