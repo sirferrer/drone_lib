@@ -21,33 +21,28 @@ int main(int argc, char **argv)
     drone.Commands.set_Offboard();
 
     // Subscribe to RC
-    ros::Publisher servo_pub = nh.advertise<mavros_msgs::OverrideRCIn>("rc/override", 10);
+    ros::Publisher servo_pub = nh.advertise<mavros_msgs::ActuatorControl>("mavros/actuator_control", 10);
 
-    mavros_msgs::OverrideRCIn rc_msg;
+    mavros_msgs::ActuatorControl act_msg;
     ROS_INFO("init done");
-    
-    rc_msg.channels[0] = 65535;
-    rc_msg.channels[1] = 65535;
-    rc_msg.channels[2] = 65535;
-    rc_msg.channels[3] = 65535;
-    rc_msg.channels[4] = 65535;
-    rc_msg.channels[5] = 65535;
-    rc_msg.channels[6] = 1200;
-    rc_msg.channels[7] = 65535;
+    act_msg.group_mix = 1;
+    act_msg.controls[5] = 0.7;
 
     ROS_INFO("set value");
 
     for (int i = 1; i < 400; i++)
     {
-        servo_pub.publish(rc_msg);
+        servo_pub.publish(act_msg);
+        ROS_INFO("set one");
         ros::spinOnce();
         rate.sleep();
     }
 
     for (int i = 1; i < 400; i++)
     {
-        rc_msg.channels[6] = 1900;
-        servo_pub.publish(rc_msg);
+        act_msg.controls[5] = 0.25;
+        servo_pub.publish(act_msg);
+        ROS_INFO("set two");
         ros::spinOnce();
         rate.sleep();
     }
