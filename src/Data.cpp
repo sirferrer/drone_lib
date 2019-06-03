@@ -9,9 +9,6 @@ data::data(float _rate)
     // Default, don't store data
     save_data = false; 
 
-    // Initialise Ros Bag
-    bag.open(get_log_name(), rosbag::bagmode::Write);
-
     // Subscribe to Altitude Data
     altitude_sub = nh.subscribe<mavros_msgs::Altitude>("/mavros/altitude", 10, &data::altitude_cb, this);
 
@@ -124,4 +121,11 @@ std::string data::get_log_name()
     std::ostringstream oss;
     oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
     return "src/drone_lib/flight_data/" + oss.str() + "_data.bag";
+}
+
+void data::start_rosbag()
+{
+    // Initialise Ros Bag
+    bag.open(get_log_name(), rosbag::bagmode::Write);
+    save_data = true; 
 }
