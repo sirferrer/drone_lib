@@ -196,6 +196,8 @@ void droneAccComp(float relPos[3], float relVel[3], float (&droneAcc)[3]) {
         for (int i = 0; i < 3; ++i) {
             droneAcc[i] /= (normDroneAcc / acclim);
         }
+    }
+}
 
 
 // Linear mapping between velocity and position. Basically it takes the relative position, 
