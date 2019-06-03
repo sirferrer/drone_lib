@@ -24,30 +24,39 @@ data::data(float _rate)
     // Subscribe to IMU Data
     imu_sub = nh.subscribe<sensor_msgs::Imu>("/mavros/imu/data", 10, &data::imu_cb, this);
 
-    // Subscribe to Position Data
+    // Subscribe to Position Data       ///< in local coordinates ENU, example: drone.Data.local_pose.linear.x
     pose_sub = nh.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &data::pose_cb, this);
 
-    // Subscribe to Velocity Data
+    // Subscribe to Velocity Data         ///< in local coordinates ENU, example: drone.Data.local_velocity.linear.x
     velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("/mavros/local_position/velocity", 10, &data::velocity_cb, this);
 
-    ///< Subscribe to target xyz relative to drone
+    ///< Subscribe to target xyz relative to drone       ///< NEU - e.g. drone.Data.target_position_relative.point.x
     target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_wrtdrone_position", 10, &data::target_position_relative_cb, this);
-
-    ///< Subscribe to target position relative to drone origin
+ 
+    ///< Subscribe to target position relative to drone origin        ///< NEU - e.g. drone.Data.target_position.point.x
     target_position_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_position", 10, &data::target_position_cb, this);
 
     ///< Subscribe to target GPS data
     target_gps_sub = nh.subscribe<sensor_msgs::NavSatFix>("/android/fix", 10, &data::target_gps_cb, this);
+
+    //     ///< Subscribe to transformed depthcam data (and transform to PC1 in callback) ///< data
+    // depth_cam_sub= nh.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points_transformed", 10, &data::depth_cam_cb, this);
 }
 
 ///< Yaw angle calculator (in degrees) based off target position relative to drone
-// - code causes a quarternion break!!?
+// - code causes a quarternion break when over the target sometimes
 float data::CalculateYawAngle()
 {
     yaw_angle_buffer.push_back(atan2(target_position_relative.point.y, target_position_relative.point.x) * 180.0 / pi);
 
     return (yaw_angle_buffer[0] + yaw_angle_buffer[1] + yaw_angle_buffer[2]) / 3.0f; ///<try using buffer
 }
+
+// ///< Depth cam callback and transform to Point Cloud 1
+// void data::depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2){
+//     depth_cam_pc2 = *pc2;
+//     pcl::fromROSMsg(depth_cam_pc2, *depth_cam_cloud); ///< transform pc2 to pc1 and place into depth_cam_cloud
+// }
 
 ///< Target position subscriber
 void data::target_position_cb(const geometry_msgs::PointStamped::ConstPtr &msg)
