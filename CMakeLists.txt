@@ -142,6 +142,10 @@ target_link_libraries(jake_node
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(servo_node
+target_link_libraries(move_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(takeoff_node
   ${catkin_LIBRARIES}
 )
