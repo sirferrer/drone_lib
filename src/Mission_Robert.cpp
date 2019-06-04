@@ -1,4 +1,7 @@
 #include "headers/gdpdrone.h"
+#include <cmath>
+
+using namespace std;
 
 bool detectObstacle(float right, float centre, float left, float range);
 float distanceToObstacle(float right, float centre, float left, float range, float angle_max, float angle_min);
