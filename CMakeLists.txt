@@ -123,7 +123,7 @@ add_executable(joel_node src/Mission_Joel.cpp src/GDPdrone.cpp src/Commands.cpp 
 add_executable(jake_node src/Mission_Jake.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(takeoff_node src/Mission_Takeoff.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(move_node src/Mission_Move.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
-
+add_executable(gerald_node src/Mission_Gerald.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(drone_node
@@ -149,3 +149,8 @@ target_link_libraries(move_node
 target_link_libraries(takeoff_node
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(gerald_node
+  ${catkin_LIBRARIES}
+)
+
