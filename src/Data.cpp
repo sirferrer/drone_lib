@@ -45,8 +45,8 @@ data::data(float _rate)
     ///< Subscribe to vishnu cam detection                                              ///< Check if vishnu cam detects ARtag using drone.Data.vishnu_cam_detection.data == 1
     vishnu_cam_detection_sub = nh.subscribe<std_msgs::Bool>("/vishnu_cam_detection", 10, &data::vishnu_cam_detection_cb, this);
 
-    ///< Subscribe to transformed depthcam data (and transform to PC1 in callback)      ///< drone.Data.depth_cam_cloud->points[2400].x for x distance to 2400th pixel
-    depth_cam_sub= nh.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points_transformed", 10, &data::depth_cam_cb, this);
+    // ///< Subscribe to transformed depthcam data (and transform to PC1 in callback)      ///< drone.Data.depth_cam_cloud->points[2400].x for x distance to 2400th pixel
+    // depth_cam_sub= nh.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points_transformed", 10, &data::depth_cam_cb, this);
 }
 
 ///< Yaw angle calculator (in degrees) based off target position relative to drone
@@ -58,11 +58,11 @@ float data::CalculateYawAngle()
     return (yaw_angle_buffer[0] + yaw_angle_buffer[1] + yaw_angle_buffer[2]) / 3.0f; ///<try using buffer
 }
 
-///< Depth cam callback and transform to Point Cloud 1
-void data::depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2){
-    depth_cam_pc2 = *pc2;
-    pcl::fromROSMsg(depth_cam_pc2, *depth_cam_cloud); ///< transform pc2 to pc1 and place into depth_cam_cloud
-}
+// ///< Depth cam callback and transform to Point Cloud 1
+// void data::depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2){
+//     depth_cam_pc2 = *pc2;
+//     pcl::fromROSMsg(depth_cam_pc2, *depth_cam_cloud); ///< transform pc2 to pc1 and place into depth_cam_cloud
+// }
 
 ///< Vishnu cam data callback function
 void data::vishnu_cam_data_cb(const geometry_msgs::Twist::ConstPtr &msg)
