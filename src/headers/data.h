@@ -16,16 +16,16 @@
 #include <boost/circular_buffer.hpp>
 #include <rosbag/bag.h>
 
-///< For Depthcam
-#include <sensor_msgs/PointCloud2.h>
-#include <sensor_msgs/PointCloud.h>
-#include <sensor_msgs/point_cloud_conversion.h>
-#include <pcl_conversions/pcl_conversions.h>
-#include <pcl/point_types.h>
-#include <pcl/PCLPointCloud2.h>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/conversions.h>
-#include <pcl_ros/transforms.h>
+// ///< For Depthcam
+// #include <sensor_msgs/PointCloud2.h>
+// #include <sensor_msgs/PointCloud.h>
+// #include <sensor_msgs/point_cloud_conversion.h>
+// #include <pcl_conversions/pcl_conversions.h>
+// #include <pcl/point_types.h>
+// #include <pcl/PCLPointCloud2.h>
+// #include <pcl_ros/point_cloud.h>
+// #include <pcl/conversions.h>
+// #include <pcl_ros/transforms.h>
 
 
 class data
@@ -45,8 +45,8 @@ public:
     geometry_msgs::Twist vishnu_cam_data;                   ///< Vishnu's cam data that says the ARtag position in body frame
     std_msgs::Bool vishnu_cam_detection;                    ///< Vishnu's cam boolean which tells if the ARtag is detected
 
-    sensor_msgs::PointCloud2 depth_cam_pc2; ///< transformed depth cam data 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr depth_cam_cloud{new pcl::PointCloud<pcl::PointXYZ>}; ///< transformed depth cam data in Point Cloud 1
+    // sensor_msgs::PointCloud2 depth_cam_pc2; ///< transformed depth cam data 
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr depth_cam_cloud{new pcl::PointCloud<pcl::PointXYZ>}; ///< transformed depth cam data in Point Cloud 1
 
     float CalculateYawAngle();                              ///< calculates yaw angle for drone to face the target
 
@@ -77,9 +77,9 @@ private:
     ros::Subscriber vishnu_cam_detection_sub;           ///< vishnu cam detection boolean
 
 
-    ///< Depth cam subscriber and callback
-    ros::Subscriber depth_cam_sub; ///< Transformed Depth cam subscriber in PointCloud2
-    void depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2); ///< Callback for transformed depth cam data
+    // ///< Depth cam subscriber and callback
+    // ros::Subscriber depth_cam_sub; ///< Transformed Depth cam subscriber in PointCloud2
+    // void depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2); ///< Callback for transformed depth cam data
 
     void vishnu_cam_data_cb(const geometry_msgs::Twist::ConstPtr &msg);                     ///< Callback for vishnu cam data
     void vishnu_cam_detection_cb(const std_msgs::Bool::ConstPtr &msg);                      ///< Callback for vishnu cam detection
