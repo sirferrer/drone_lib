@@ -31,19 +31,19 @@ data::data(float _rate)
     velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("/mavros/local_position/velocity", 10, &data::velocity_cb, this);
 
     ///< Subscribe to target xyz relative to drone                                      ///< NEU - e.g. drone.Data.target_position_relative.point.x
-    target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_wrtdrone_position", 10, &data::target_position_relative_cb, this);
+    target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_wrtdrone_position", 1, &data::target_position_relative_cb, this);
  
     ///< Subscribe to target position relative to drone origin                          ///< NEU - e.g. drone.Data.target_position.point.x
-    target_position_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_position", 10, &data::target_position_cb, this);
+    target_position_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_position", 1, &data::target_position_cb, this);
 
     ///< Subscribe to target GPS data
-    target_gps_sub = nh.subscribe<sensor_msgs::NavSatFix>("/android/fix", 10, &data::target_gps_cb, this);
+    target_gps_sub = nh.subscribe<sensor_msgs::NavSatFix>("/android/fix", 1, &data::target_gps_cb, this);
 
-    ///< Subscribe to vishnu cam data                                                   ///< Get body coordinates of ARtag using e.g. drone.Data.vishnu_cam_data.linear.x
-    vishnu_cam_data_sub = nh.subscribe<geometry_msgs::Twist>("/vishnu_cam_data", 10, &data::vishnu_cam_data_cb, this);
+    ///< Subscribe to vishnu cam data                                                   ///< Get body coordinates (RIGHT,DOWN,UP) of ARtag using e.g. drone.Data.vishnu_cam_data.linear.x
+    vishnu_cam_data_sub = nh.subscribe<geometry_msgs::Twist>("/vishnu_cam_data", 1, &data::vishnu_cam_data_cb, this);
 
     ///< Subscribe to vishnu cam detection                                              ///< Check if vishnu cam detects ARtag using drone.Data.vishnu_cam_detection.data == 1
-    vishnu_cam_detection_sub = nh.subscribe<std_msgs::Bool>("/vishnu_cam_detection", 10, &data::vishnu_cam_detection_cb, this);
+    vishnu_cam_detection_sub = nh.subscribe<std_msgs::Bool>("/vishnu_cam_detection", 1, &data::vishnu_cam_detection_cb, this);
 
     // ///< Subscribe to transformed depthcam data (and transform to PC1 in callback)      ///< drone.Data.depth_cam_cloud->points[2400].x for x distance to 2400th pixel
     // depth_cam_sub= nh.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points_transformed", 10, &data::depth_cam_cb, this);
@@ -51,18 +51,11 @@ data::data(float _rate)
 
 ///< Yaw angle calculator (in degrees) based off target position relative to drone
 // - code causes a quarternion break when over the target sometimes
-float data::CalculateYawAngle()
+float data::CalculateYawAngleToTarget()
 {
-    yaw_angle_buffer.push_back(atan2(target_position_relative.point.y, target_position_relative.point.x) * 180.0 / pi);
-
-    return (yaw_angle_buffer[0] + yaw_angle_buffer[1] + yaw_angle_buffer[2]) / 3.0f; ///<try using buffer
+    return atan2(target_position_relative.point.y, target_position_relative.point.x) * 180.0 / pi;
 }
 
-// ///< Depth cam callback and transform to Point Cloud 1
-// void data::depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2){
-//     depth_cam_pc2 = *pc2;
-//     pcl::fromROSMsg(depth_cam_pc2, *depth_cam_cloud); ///< transform pc2 to pc1 and place into depth_cam_cloud
-// }
 
 ///< Vishnu cam data callback function
 void data::vishnu_cam_data_cb(const geometry_msgs::Twist::ConstPtr &msg)
@@ -156,3 +149,9 @@ void data::start_rosbag()
     bag.open(get_log_name(), rosbag::bagmode::Write);
     save_data = true; 
 }
+
+// ///< Depth cam callback and transform to Point Cloud 1
+// void data::depth_cam_cb(const sensor_msgs::PointCloud2ConstPtr& pc2){
+//     depth_cam_pc2 = *pc2;
+//     pcl::fromROSMsg(depth_cam_pc2, *depth_cam_cloud); ///< transform pc2 to pc1 and place into depth_cam_cloud
+// }
