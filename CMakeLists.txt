@@ -123,13 +123,16 @@ include_directories(include  ${catkin_INCLUDE_DIRS})
 
 add_executable(drone_node src/Mission.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(robert_node src/Mission_Robert.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
-add_executable(joel_node src/Mission_Joel.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(jake_node src/Mission_Jake.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
-add_executable(joelobs_node src/Mission_joelobs.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
+
 add_executable(jake_landing_node src/Mission_Jake_Landing.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(takeoff_node src/Mission_Takeoff.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(move_node src/Mission_Move.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(gerald_node src/Mission_Gerald.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
+
+add_executable(landing_indoor_node src/Mission_Landing_Indoor.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
+
+add_executable(jake_gps_landing_node src/Mission_Jake_Landing_GPSbackup.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(drone_node
@@ -140,9 +143,6 @@ target_link_libraries(robert_node
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(joel_node
-  ${catkin_LIBRARIES}
-)
 
 target_link_libraries(jake_node
   ${catkin_LIBRARIES}
@@ -152,9 +152,10 @@ target_link_libraries(jake_landing_node
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(joelobs_node
+target_link_libraries(landing_indoor_node
   ${catkin_LIBRARIES}
 )
+
 
 target_link_libraries(move_node
   ${catkin_LIBRARIES}
@@ -167,4 +168,9 @@ target_link_libraries(takeoff_node
 target_link_libraries(gerald_node
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(jake_gps_landing_node
+  ${catkin_LIBRARIES}
+)
+
 

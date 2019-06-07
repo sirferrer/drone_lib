@@ -16,7 +16,8 @@
     float relPosOld[3] = {0};
     float relPosHoriz[3] = {0};
     float accFix;
-    
+    float gpsdistance;
+    float camdistance = 5.0f;
 
     // declare functions
     void droneInitVel(float relPos[3], float (&droneVel)[3]); 
@@ -32,6 +33,7 @@
 
     // Landing
     void velPosMap(float relPosLanding[3], float (&relVelLanding)[3]); 
+    void velPosMapCam(float relPosLanding[3], float (&relVelLanding)[3]);
     float altitudeFix(float realAltitude, float altitude);
 
 
@@ -217,10 +219,9 @@ void velPosMap(float relPosLanding[3], float (&relVelLanding)[3])
 {
     float velMax = 2.0;
     float posMax = 3.0;
-    float distance;
     float scaling;
 
-    distance = norm(relPosLanding);
+    gpsdistance = norm(relPosLanding);
 
     for (int i = 0; i < 3; ++i) {
         relVelLanding[i] = relPosLanding[i];
@@ -228,17 +229,41 @@ void velPosMap(float relPosLanding[3], float (&relVelLanding)[3])
 
     if (distance > posMax) {
         for (int i = 0; i < 3; ++i) {
-            relVelLanding[i] /= ( distance / velMax );
+            relVelLanding[i] /= ( gpsdistance / velMax );
         }
     }
     else {
         scaling = norm(relPosLanding) * velMax / posMax;
         for (int i = 0; i < 3; ++i) {
-            relVelLanding[i] /= ( distance / scaling );
+            relVelLanding[i] /= ( gpsdistance / scaling );
         }
     }
 } 
 
+void velPosMapCam(float relPosLanding[3], float (&relVelLanding)[3]) 
+{
+    float velMax = 1.0;
+    float posMax = 3.0;
+    float scaling;
+
+    camdistance = norm(relPosLanding);
+
+    for (int i = 0; i < 3; ++i) {
+        relVelLanding[i] = relPosLanding[i];
+    }
+
+    if (distance > posMax) {
+        for (int i = 0; i < 3; ++i) {
+            relVelLanding[i] /= ( gpsdistance / velMax );
+        }
+    }
+    else {
+        scaling = norm(relPosLanding) * velMax / posMax;
+        for (int i = 0; i < 3; ++i) {
+            relVelLanding[i] /= ( gpsdistance / scaling );
+        }
+    }
+} 
 
 float altitudeFix(float realAltitude, float setAltitude) {
     float k = 0.1;

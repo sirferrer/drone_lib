@@ -3,6 +3,8 @@
 #include "headers/data.h"
 #include <cmath>
 
+const double pi = 3.14159265358979;
+
 //-----   METHODS -----//
 // Default constructor
 commands::commands(float _rate)
@@ -103,7 +105,7 @@ void commands::request_Takeoff(float _altitude, float _counter)
 
 //-----   MOVEMENT COMMANDS -----//
 
-///< BODY_OFFSET (x,y,z) = (forward, left, up)
+///< BODY_OFFSET (x,y,z) = (right, forward, up)
 void commands::move_Position_Local(float _x, float _y, float _z, float _yaw_angle_deg, std::string _frame, int _count)
 {
     mavros_msgs::PositionTarget pos;
@@ -201,8 +203,7 @@ void commands::move_Acceleration_Local_Trick(float _x, float _y, float _z, std::
     pos.type_mask = mavros_msgs::PositionTarget::IGNORE_PX | mavros_msgs::PositionTarget::IGNORE_PY |
                     mavros_msgs::PositionTarget::IGNORE_PZ | mavros_msgs::PositionTarget::IGNORE_AFX |
                     mavros_msgs::PositionTarget::IGNORE_AFY | mavros_msgs::PositionTarget::IGNORE_AFZ |
-                    mavros_msgs::PositionTarget::FORCE | mavros_msgs::PositionTarget::IGNORE_YAW |
-                    mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
+                    mavros_msgs::PositionTarget::FORCE | mavros_msgs::PositionTarget::IGNORE_YAW;
 
     // Update accumulated velocites. Acc = DV/Dt -> DV = Acc * Dt -> DV = Acc / Freq
     velocity_x += _x / rate;
