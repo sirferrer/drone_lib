@@ -119,6 +119,7 @@ include_directories(include  ${catkin_INCLUDE_DIRS})
 
 add_executable(takeoff_node src/Mission_Takeoff.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 add_executable(move_node src/Mission_Move.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
+add_executable(robert_node src/Mission_Robert.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp)
 
 
 ## Specify libraries to link a library or executable target against
@@ -129,3 +130,8 @@ target_link_libraries(move_node
 target_link_libraries(takeoff_node
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(robert_node
+  ${catkin_LIBRARIES}
+)
+
