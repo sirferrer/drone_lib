@@ -48,7 +48,8 @@ public:
     // sensor_msgs::PointCloud2 depth_cam_pc2; ///< transformed depth cam data 
     // pcl::PointCloud<pcl::PointXYZ>::Ptr depth_cam_cloud{new pcl::PointCloud<pcl::PointXYZ>}; ///< transformed depth cam data in Point Cloud 1
 
-    float CalculateYawAngle();                              ///< calculates yaw angle for drone to face the target
+    float CalculateYawAngleToTarget();              ///< calculates yaw angle for drone to face the target
+
 
     ros::Rate GetRate() { return rate; }                    ///< added to get the rate
 
@@ -94,7 +95,6 @@ private:
     void velocity_cb(const geometry_msgs::TwistStamped::ConstPtr &msg);
     void lidar_cb(const sensor_msgs::LaserScan::ConstPtr &msg);
     std::string get_log_name();
-    boost::circular_buffer<float> yaw_angle_buffer = boost::circular_buffer<float>(3);      ///< Circular buffer for yaw angle to target
 };
 
 #endif /* DATA_H */
