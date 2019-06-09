@@ -49,6 +49,16 @@ int main(int argc, char **argv)
         altitude = drone.Data.altitude.bottom_clearance;
         ROS_INFO("Altitude is: %f", altitude);
 
+        ///< Calculate camdistance if detected
+        if (drone.Data.vishnu_cam_detection.data)
+        {
+            relPosLanding[0] = drone.Data.vishnu_cam_data.linear.x;
+            relPosLanding[1] = drone.Data.vishnu_cam_data.linear.y;
+            relPosLanding[2] = 0.0;
+            camdistance = norm(relPosLanding);
+        }
+
+
 
         if (camdistance > descentDistance && drone.Data.vishnu_cam_detection.data)   ///< - close enough and target seen, use vishnu cam data to centre over target
         {
