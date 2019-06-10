@@ -10,7 +10,7 @@ int main(int argc, char **argv)
     GDPdrone drone;
 
     // Save data to flight_data
-    drone.Data.start_rosbag();
+    // drone.Data.start_rosbag();
 
     //Set the rate. Default working frequency is 25Hz.
     float loop_rate = 10.0f;
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
             ROS_INFO("tag seen - using vishnu data to centre over target");
 
             //pause for a sec so that drone has 0 pitch
-            for(int count = 1; count < 11 ; count++)
+            for(int count = 1; count < 21 ; count++)
             {
                 drone.Commands.move_Velocity_Local(0.0f, 0.0f, 0.0f, 0.0f, "BODY_OFFSET");
                 ros::spinOnce();
@@ -81,15 +81,15 @@ int main(int argc, char **argv)
                 // // Update position using Vishnu's cam - vishnu's cam gives body frame (xyz) = (right down up),
 
                 relPosLanding[0] = drone.Data.vishnu_cam_data.linear.x; ///< move right
-                relPosLanding[1] = drone.Data.vishnu_cam_data.linear.y; ///< move backward
+                relPosLanding[1] = drone.Data.vishnu_cam_data.linear.y; ///< move forward
                 relPosLanding[2] = 0.0;
                 velCamPosMap(relPosLanding, relVelLanding); // Calculate velocities needed to get towards target in body frame
 
 
-                ROS_INFO("Distance from target according to cam: %f, move forward: %f, move right: %f", camdistance, -drone.Data.vishnu_cam_data.linear.y, drone.Data.vishnu_cam_data.linear.x);
-                for(int count = 1; count < camdistance / velocitynorm * loop_rate ; count++)
+                ROS_INFO("Distance from target according to cam: %f, move forward: %f, move right: %f", camdistance, drone.Data.vishnu_cam_data.linear.y, drone.Data.vishnu_cam_data.linear.x);
+                for(int count = 1; count < floor(camdistance / velocitynorm * loop_rate / 2) ; count++)
                 {
-                    drone.Commands.move_Velocity_Local(relVelLanding[0], -relVelLanding[1], 0.0f, 0.0f, "BODY_OFFSET");
+                    drone.Commands.move_Velocity_Local(relVelLanding[0], relVelLanding[1], 0.0f, 0.0f, "BODY_OFFSET");
                     ros::spinOnce();
                     rate.sleep();
                 }
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
             ROS_INFO("Close enough, start descending");
             //pause for a sec so that drone has 0 pitch
-            for(int count = 1; count < 11 ; count++)
+            for(int count = 1; count < 21 ; count++)
             {
                 drone.Commands.move_Velocity_Local(0.0f, 0.0f, 0.0f, 0.0f, "BODY_OFFSET");
                 ros::spinOnce();
@@ -116,15 +116,15 @@ int main(int argc, char **argv)
                 // // Update position using Vishnu's cam - vishnu's cam gives body frame (xyz) = (right down up),
 
                 relPosLanding[0] = drone.Data.vishnu_cam_data.linear.x; ///< move right
-                relPosLanding[1] = drone.Data.vishnu_cam_data.linear.y; ///< move backward
+                relPosLanding[1] = drone.Data.vishnu_cam_data.linear.y; ///< move forward
                 relPosLanding[2] = 0.0;
                 velCamPosMap(relPosLanding, relVelLanding); // Calculate velocities needed to get towards target in body frame - calculates camdistance and velocitynorm too
 
 
-                ROS_INFO("Distance from target according to cam: %f, move forward: %f, move right: %f", camdistance, -drone.Data.vishnu_cam_data.linear.y, drone.Data.vishnu_cam_data.linear.x);
-                for(int count = 1; count < camdistance / velocitynorm * loop_rate ; count++)
+                ROS_INFO("Distance from target according to cam: %f, move forward: %f, move right: %f", camdistance, drone.Data.vishnu_cam_data.linear.y, drone.Data.vishnu_cam_data.linear.x);
+                for(int count = 1; count < floor(camdistance / velocitynorm * loop_rate / 2) ; count++)
                 {
-                    drone.Commands.move_Velocity_Local(relVelLanding[0], -relVelLanding[1], -0.1f, 0.0f, "BODY_OFFSET");
+                    drone.Commands.move_Velocity_Local(relVelLanding[0], relVelLanding[1], 0.0f, 0.0f, "BODY_OFFSET");
                     ros::spinOnce();
                     rate.sleep();
                 }
@@ -133,8 +133,8 @@ int main(int argc, char **argv)
         }
         else   ///< else, rotate around to try to find target (circle + slight descent)
         {
-            ROS_INFO("No target detected, rotating & descending to search");
-            drone.Commands.move_Velocity_Local(0.0f, 0.0f, -0.05f, 30.0f, "LOCAL_OFFSET");
+            ROS_INFO("No target detected, rotating to search");
+            drone.Commands.move_Velocity_Local(0.0f, 0.0f, 0.0f, 30.0f, "LOCAL_OFFSET");
             ros::spinOnce();
             rate.sleep();
         }
