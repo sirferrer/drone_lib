@@ -3,7 +3,7 @@
  * Compilation fixed by Arek Sredzki (arek@sredzki.com)
  */
 
-#include "Dstar.h"
+#include "headers/Dstar.h"
 
 /* void Dstar::Dstar()
  * --------------------------
