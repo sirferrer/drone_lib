@@ -31,7 +31,7 @@ data::data(float _rate)
     velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("/mavros/local_position/velocity", 10, &data::velocity_cb, this);
 
     ///< Subscribe to target xyz relative to drone                                      ///< ENU - e.g. drone.Data.target_position_relative.point.x
-    target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/filtered_target_wrtdrone_position", 1, &data::target_position_relative_cb, this);
+    target_position_relative_sub = nh.subscribe<geometry_msgs::PointStamped>("/gps_wrtdrone_position", 1, &data::target_position_relative_cb, this);
  
     ///< Subscribe to target abs velocity                                                ///< ENU - e.g. drone.Data.target_abs_velocity.linear.x
     target_abs_velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("/filtered_target_abs_velocity", 1, &data::target_abs_velocity_cb, this);
