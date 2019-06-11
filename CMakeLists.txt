@@ -202,3 +202,7 @@ target_link_libraries(mission_egg_vision_node
 target_link_libraries(mission_egg_novision_node
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(lucian_node
+  ${catkin_LIBRARIES}
+)
