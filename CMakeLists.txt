@@ -131,7 +131,7 @@ add_executable(move_node src/Mission_Move.cpp src/GDPdrone.cpp src/Commands.cpp 
 add_executable(gerald_node src/Mission_Gerald.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp src/Grabber.cpp)
 add_executable(landing_indoor_node src/Mission_Landing_Indoor.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp src/Grabber.cpp)
 add_executable(jake_gps_landing_node src/Mission_Jake_Landing_GPSbackup.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp src/Grabber.cpp)
-
+add_executable(lucian_node src/Mission_Lucian.cpp src/Dstar.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp src/Grabber.cpp)
 
 add_executable(mission_full_novision_node src/Mission_Full_Novision.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp src/Grabber.cpp)
 add_executable(landing_indoor_slow_node src/Mission_Landing_Indoor_Slow.cpp src/GDPdrone.cpp src/Commands.cpp src/Functions.cpp src/Data.cpp src/Grabber.cpp)
@@ -200,5 +200,9 @@ target_link_libraries(mission_egg_vision_node
 )
 
 target_link_libraries(mission_egg_novision_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(lucian_node
   ${catkin_LIBRARIES}
 )
