@@ -74,6 +74,7 @@ int main(int argc, char **argv)
     int time_takeoff = 50;
     drone.Commands.request_Takeoff(altitude, time_takeoff);
 
+
    ///<---------------------------------------PHASE 1----------------------------------->
 
     // Record positions at beggining of mission
